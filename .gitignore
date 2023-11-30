@@ -1,0 +1,35 @@
+# compiled output
+/backend/dist
+/backend/node_modules
+
+# Logs
+/backendlogs
+/backend*.log
+/backendnpm-debug.log*
+/backendpnpm-debug.log*
+/backendyarn-debug.log*
+/backendyarn-error.log*
+/backendlerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/backend/coverage
+/backend/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
