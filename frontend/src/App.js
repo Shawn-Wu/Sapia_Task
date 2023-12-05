@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 
+const Host_Address = '127.0.0.1:8001'
+
 function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -8,7 +10,7 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   const handleLogin = async () => {
-    const response = await fetch('http://127.0.0.1:8001/token', {
+    const response = await fetch('http://' + Host_Address + '/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +32,7 @@ function App() {
   };
 
   const getUserProfile = async () => {
-    const response = await fetch('http://127.0.0.1:8001/users/' + username, {
+    const response = await fetch('http://' + Host_Address + '/users/' + username, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

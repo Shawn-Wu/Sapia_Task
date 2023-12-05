@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './schemas/users.schema';
-import { TokenGuard } from 'src/token/token.guard';
+import { TokenGuard } from '../token/token.guard';
 
 @Controller('users')
 export class UsersController {

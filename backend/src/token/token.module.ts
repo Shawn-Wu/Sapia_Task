@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { TokenService } from "./token.service";
 import { TokenController } from "./token.controller";
-import { UsersModule } from "src/users/users.module";
+import { UsersModule } from "../users/users.module";
 
 @Module({
     imports: [
