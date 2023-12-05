@@ -1,13 +1,11 @@
 import { Redis } from "ioredis";
 
-const redisConfig = {
-  port: 6379,
-  host: '127.0.0.1',
-};
-
 export class RedisInstance {
   static initRedis() {
-    const redis = new Redis(redisConfig);
+    const redis = new Redis({
+      port: parseInt(process.env.Redis_Port, 10) || 6379,
+      host: process.env.Redis_Host,
+    });
     redis.on('error', (err) => console.log('Redis cluster Error', err));
     return redis;
   }

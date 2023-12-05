@@ -24,7 +24,7 @@ export class TokenService {
                 throw new HttpException("login fail " + (MAX_TRY_NUM-1) + " times left in " + MAX_TRY_WITHIN_TIMES + "s", HttpStatus.UNAUTHORIZED);
             }
             if (Number(failCount) >= MAX_TRY_NUM) {
-                throw new HttpException("A maximum of " + MAX_TRY_NUM + "in " + MAX_TRY_WITHIN_TIMES + "s please try later", HttpStatus.FORBIDDEN);
+                throw new HttpException("A maximum of " + MAX_TRY_NUM + " in " + MAX_TRY_WITHIN_TIMES + "s please try later", HttpStatus.FORBIDDEN);
             }
             redis.incr(username);
             throw new HttpException("login fail " + (MAX_TRY_NUM-Number(failCount)-1) + " times left in " + MAX_TRY_WITHIN_TIMES + "s", HttpStatus.UNAUTHORIZED);
