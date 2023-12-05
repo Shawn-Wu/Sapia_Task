@@ -22,4 +22,5 @@ password: 123
 
 ## What to do next:
 1. add test
-2. add metrics and granfna panel and monitor
+2. add backend api doc by swagger
+3. add metrics and granfna panel and monitor
