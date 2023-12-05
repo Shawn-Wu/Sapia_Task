@@ -1,6 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ForbiddenException, HttpStatus, HttpException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
+import { RedisInstance } from 'src/redis/redis';
+
+const MAX_TRY_NUM = 3
+// unit: second
+const MAX_TRY_WITHIN_TIMES = 60
 
 @Injectable()
 export class TokenService {
@@ -11,10 +16,18 @@ export class TokenService {
 
     async genToken(username: string, password: string) {
         const user = await this.userService.findOne(username);
-
-        // TODO add a maximum of 3 attempts within 5 minutes
-        if (user?.password !== password){
-            throw new UnauthorizedException();
+        if (user?.password !== password) {
+            const redis = RedisInstance.initRedis();
+            const failCount = await redis.get(username);
+            if (failCount == null) {
+                redis.setex(username, MAX_TRY_WITHIN_TIMES, 1)
+                throw new HttpException("login fail " + (MAX_TRY_NUM-1) + " times left in " + MAX_TRY_WITHIN_TIMES + "s", HttpStatus.UNAUTHORIZED);
+            }
+            if (Number(failCount) >= MAX_TRY_NUM) {
+                throw new HttpException("A maximum of " + MAX_TRY_NUM + "in " + MAX_TRY_WITHIN_TIMES + "s please try later", HttpStatus.FORBIDDEN);
+            }
+            redis.incr(username);
+            throw new HttpException("login fail " + (MAX_TRY_NUM-Number(failCount)-1) + " times left in " + MAX_TRY_WITHIN_TIMES + "s", HttpStatus.UNAUTHORIZED);
         }
 
         const playload = {
