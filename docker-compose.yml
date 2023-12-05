@@ -1,0 +1,58 @@
+version: "3.0"
+
+services:
+  redis_sapia:
+    container_name: redis_sapia
+    image: redis
+    command: redis-server /etc/redis/redis.conf
+    ports:
+      - 6379:6379
+    restart: on-failure
+    volumes:
+      - ./backend/scr/redis/redis.conf:/etc/redis/redis.conf
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - network_sapia
+
+  mongo_sapia:
+    container_name: mongo_sapia
+    image: mongo
+    command: mongod --bind_ip_all
+    ports:
+      - 27017:27017
+    restart: on-failure
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - network_sapia
+
+  backend_sapia:
+      container_name: backend_sapia
+      build:
+        context: .
+        dockerfile: ./backend/Dockerfile
+      ports:
+        - 8001:8001
+      restart: on-failure
+      networks:
+        - network_sapia
+      depends_on:
+        - redis_sapia
+        - mongo_sapia
+
+  frontend_sapia:
+      container_name: frontend_sapia
+      build:
+        context: .
+        dockerfile: ./frontend/Dockerfile
+      ports:
+        - 3000:3000
+      restart: on-failure
+      networks:
+        - network_sapia
+      depends_on:
+        - backend_sapia
+
+networks:
+  network_sapia:
