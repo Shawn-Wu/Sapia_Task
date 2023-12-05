@@ -19,31 +19,31 @@ function App() {
     const data = await response.json();
 
     if (response.ok == false) {
-      alert('login failed, please check username and password!');
+      const fial_message = data?.message
+      alert('failed: ' + fial_message);
     } else {
       localStorage.setItem("token", data.token);
       setLoggedIn(true);
       await getUserProfile();
     }
-    
+
   };
 
   const getUserProfile = async () => {
-    const response = await fetch('http://localhost:8001/users/'+username, {
+    const response = await fetch('http://localhost:8001/users/' + username, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem("token"),
-        'WUXINNNN': 'ddddd'
       }
     });
 
+    const data = await response.json();
+
     if (response.ok == false) {
-      alert('获取不到用户信息');
-      // handleLogout()
+      alert('failed: ' + data?.message);
       return false
     } else {
-      const data = await response.json();
       setUserid(data._id)
       return true
     }
